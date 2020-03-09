@@ -13,7 +13,7 @@
 	margin: 0 auto;
 	padding: 1em 0 3em;
 	width: 100%;
-	max-width: 1200px;
+	max-width: 1000px;
 	overflow: hidden;
 }
 .component .filler {
@@ -96,4 +96,15 @@ tbody tr:hover {
 	overflow-y: auto;
 	max-height: 50vh;
 }
+
+input[type=text], select {
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
 

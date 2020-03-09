@@ -7,7 +7,13 @@ const linkSchema = new mongoose.Schema({
     },
     url: {
         type: String,
-        required: true
+        required: true,
+        default: "url"
+    },
+    urlSlug: {
+        type: String,
+        required: true,
+        default: "slug"
     },
     clicks: {
         type: Number,
@@ -19,6 +25,6 @@ const linkSchema = new mongoose.Schema({
         default: Date.now(),
         required: false
     }
-});
+}, {collection: "links"});
 
 module.exports = mongoose.model('Link', linkSchema); // export schema

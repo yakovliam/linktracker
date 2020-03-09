@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 // routes -----
 const authRoute = require('./routes/auth');
 const indexRoute = require('./routes/index');
+const linksRoute = require('./routes/links');
 // routes -----
 
 // dotenv config -----
@@ -35,7 +36,7 @@ app.use(express.static(__dirname + '/views/profile'));
 // route MiddleWare
 app.use('/api/user', authRoute);
 app.use('/', indexRoute);
-
+app.use('/links', linksRoute);
 
 
 app.listen(3000, () => console.log("Started on port 3000"));

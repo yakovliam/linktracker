@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('../model/User');
+const Link = require('../model/Link');
 const jwt = require('jsonwebtoken');
 
 /* get home */
@@ -22,7 +23,9 @@ router.get('/', async function (req, res) {
         // get user data
         const user = await User.findOne({_id: verifiedUser._id});
 
-        res.render('profile/index', {title: 'Profile', username: user.username});
+        const userLinks = await Link.find({userId: verifiedUser._id});
+
+        res.render('profile/index', {title: 'Profile', username: user.username, links: userLinks});
     }
 });
 
