@@ -1,5 +1,4 @@
 const Joi = require('@hapi/joi');
-
 // register validation
 const registerValidation = (data) => {
 
@@ -21,5 +20,16 @@ const loginValidation = (data) => {
 
     return schema.validate(data);
 };
+
+const urlValidation = (data) => {
+
+    const schema = Joi.object({
+        url: Joi.string().uri()
+    });
+
+    return schema.validate(data);
+
+};
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
+module.exports.urlValidation = urlValidation;

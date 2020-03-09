@@ -36,7 +36,7 @@ app.use(express.static(__dirname + '/views/profile'));
 // route MiddleWare
 app.use('/api/user', authRoute);
 app.use('/', indexRoute);
-app.use('/links', linksRoute);
+app.use('/api/links', linksRoute);
 
 
 app.listen(3000, () => console.log("Started on port 3000"));

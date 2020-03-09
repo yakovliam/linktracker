@@ -21,9 +21,9 @@ const linkSchema = new mongoose.Schema({
         default: 0
     },
     date: {
-        type: Date,
+        type: Number,
         default: Date.now(),
-        required: false
+        required: true
     }
 }, {collection: "links"});
 

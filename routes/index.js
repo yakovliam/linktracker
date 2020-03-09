@@ -23,7 +23,8 @@ router.get('/', async function (req, res) {
         // get user data
         const user = await User.findOne({_id: verifiedUser._id});
 
-        const userLinks = await Link.find({userId: verifiedUser._id});
+        //TODO Change date so more accurate
+        const userLinks = await Link.find({userId: verifiedUser._id}); //TODO SORT BY DATE
 
         res.render('profile/index', {title: 'Profile', username: user.username, links: userLinks});
     }
