@@ -6,7 +6,6 @@ function auth(request, response, next) {
     if (!token) return response.status(401).send("Access denied!"); // no token!
 
     try {
-
         const verified = jwt.verify(token, process.env.TOKEN_SECRET);
         request.user = verified;
     } catch (err) {

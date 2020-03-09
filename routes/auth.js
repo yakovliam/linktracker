@@ -12,9 +12,13 @@ router.post('/register', async (request, response) => {
 
     if (error) return response.status(400).send(error.details[0].message); // (error thrown) not valid, don't create
 
-    // check if user is already in the database
+    // check if user email is already in the database
     const emailExists = await User.findOne({email: request.body.email});
     if (emailExists) return response.status(400).send("Email already exists!");
+
+    // check if username is already in the database
+    const usernameExists = await User.findOne({username: request.body.username});
+    if (usernameExists) return response.status(400).send("Username already exists!");
 
     // hash password for entry into the database
     const salt = await bcrypt.genSalt(10);
@@ -31,9 +35,9 @@ router.post('/register', async (request, response) => {
         // try to save user to the database
         await user.save();
 
-        // respond to client with user's new Id
-        response.send({userId: user.id});
-
+        // respond by redirecting
+        response.header("location", "../../");
+        response.send({err: 0, redirect: "../../"})
     } catch (err) {
         response.status(400).send(err);
     }
@@ -47,16 +51,17 @@ router.post('/login', async (request, response) => {
 
     // check if user is in the database
     const targetUser = await User.findOne({email: request.body.email});
-    if (!targetUser) return response.status(400).send("(Email) or password is incorrect!"); // email doesn't exist, so we can't proceed!
+    if (!targetUser) return response.status(400).send("Email or password is incorrect!"); // email doesn't exist, so we can't proceed!
 
     // check if the password is equal
     const validPass = await bcrypt.compare(request.body.password, targetUser.password);
-    if (!validPass) return response.status(400).send("Email or (password) is incorrect!"); // password is wrong, so we can't proceed!
+    if (!validPass) return response.status(400).send("Email or password is incorrect!"); // password is wrong, so we can't proceed!
 
     // JSONWebToken for user to be able to have a session (create and assign)
     const token = jwt.sign({_id: targetUser._id}, process.env.TOKEN_SECRET);
-    response.header("auth-token", token).send(token);
 
+    response.cookie('auth-token', token);
+    response.send({err: 0, redirect: "../../"})
 });
 
 

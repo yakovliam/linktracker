@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='login_form_css.css'/>
+</head>
+<body>
+<div class="login-page">
+    <div class="form">
+        <h1>Log In</h1>
+        <form class="login-form">
+            <input id="email" type="text" placeholder="Email"/>
+            <input id="password" type="password" placeholder="Password"/>
+            <button id="login">login</button>
+            <p class="message-response" id="response"></p>
+            <p class="message">Not registered? <a href="../register">Create an account</a></p>
+        </form>
+    </div>
+</div>
+<script>
+
+    document.getElementById("login").addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value;
+        if (email === undefined || email === "") {
+            $("#response").text("Invalid login details!");
+            return;
+        }
+
+        const password = document.getElementById("password").value;
+        if (password === undefined || password === "") {
+            $("#response").text("Invalid login details!");
+            return;
+        }
+
+        const path = "/api/user/login";
+
+        $.ajax({
+            type: "POST",
+            url: path,
+            data: {email: email, password: password},   // <== change is here
+            success: function (msg) {
+                if (msg.err === 0) {
+                    window.location = msg.redirect;
+                } else {
+                    $("#response").text(parseMessage(msg.responseText));
+                }
+            },
+            error: function (msg) {
+                // decode
+                if (msg.err === 0) {
+                    window.location = msg.redirect;
+                } else {
+                    $("#response").text(parseMessage(msg.responseText));
+                }
+            }
+        });
+    });
+
+    function parseMessage(error) {
+        if (error === "\"email\" length must be at least 6 characters long") {
+            return "Email must be > 6 characters long!";
+        }
+
+        if (error === "\"email\" must be a valid email") {
+            return "Email is invalid!";
+        }
+
+        if (error === "\"password\" length must be at least 6 characters long") {
+            return "Password must be > 6 characters long!"
+        }
+
+        if (error === "Email or password is incorrect!") {
+            return "Email or password is incorrect!";
+        }
+    }
+</script>
+</body>
+</html>
