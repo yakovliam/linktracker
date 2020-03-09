@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 // routes -----
 const authRoute = require('./routes/auth');
 const indexRoute = require('./routes/index');
+const linksApiRoute = require('./routes/linksApi');
 const linksRoute = require('./routes/links');
 // routes -----
 
@@ -32,11 +33,13 @@ app.use(cookieParser());
 app.use(express.static(__dirname + '/views/login'));
 app.use(express.static(__dirname + '/views/register'));
 app.use(express.static(__dirname + '/views/profile'));
+app.use(express.static(__dirname + '/views/manage'));
 
 // route MiddleWare
 app.use('/api/user', authRoute);
 app.use('/', indexRoute);
-app.use('/api/links', linksRoute);
+app.use('/api/links', linksApiRoute);
+app.use('/links', linksRoute);
 
 
 app.listen(3000, () => console.log("Started on port 3000"));

@@ -98,7 +98,7 @@
 
     let table = document.getElementById("table");
 
-    links.forEach((link) => {
+    links.sort((a, b) => a.date > b.date).reverse().forEach((link) => {
         let row = table.insertRow(-1);
 
         let url = row.insertCell(0);
@@ -107,7 +107,7 @@
         let date = row.insertCell(3);
 
         url.innerHTML = link.url;
-        urlSlug.innerHTML = link.urlSlug;
+        urlSlug.innerHTML = "<a href='" + window.location + "links" + link.urlSlug + "'>" + window.location + "links" + link.urlSlug + "</a>";
         clicks.innerHTML = link.clicks;
 
         const dateObj = new Date(link.date);
@@ -115,7 +115,7 @@
         date.innerHTML = dateObj.toString();
 
         let manage = row.insertCell(4);
-        manage.innerHTML = "<a href=\"https://www.google.com\">MANAGE</a>"
+        manage.innerHTML = "<a onclick='parseRedirect(this)' name='" + link.urlSlug + "' href='#'>MANAGE</a>";
     });
 
     // parse message
@@ -129,6 +129,13 @@
         }
 
         return err;
+    }
+
+    function parseRedirect(element) {
+        // get link with slug
+        const slug = element.name;
+        // redirect
+        window.location.href = "../manage?slug=" + slug;
     }
 
 </script>

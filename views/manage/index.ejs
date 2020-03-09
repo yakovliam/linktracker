@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" type="text/css" href="css/normalize.css"/>
+    <link rel="stylesheet" type="text/css" href="css/demo.css"/>
+    <link rel="stylesheet" type="text/css" href="css/component.css"/>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Logged into <%= username %></h1>
+        <h2>Managing <%= slug %></h2>
+        <br/>
+        <button class="button" id="back">BACK</button>
+    </header>
+    <div class="component">
+        <h2>Statistics</h2>
+        <p>Link statistics</p>
+        <table id="table">
+            <thead>
+            <tr>
+                <th>Link URL</th>
+                <th>Link Slug</th>
+                <th># of Clicks</th>
+                <th>Date Created</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="component">
+        <h2>Click</h2>
+        <p>List of users who have clicked the links</p>
+        <table id="data-table">
+            <thead>
+            <tr>
+                <th>IP Address</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div><!-- /container -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+<script src="js/jquery.stickyheader.js"></script>
+<script>
+    // logout button
+    document.getElementById("back").addEventListener("click", (ev) => {
+        ev.preventDefault();
+
+        window.location.href = "../";
+    });
+
+    function delete_cookie(name) {
+        document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+
+    // links handling
+    function handleLinks() {
+        let link =<%- JSON.stringify(link) %>;
+
+        let table = document.getElementById("table");
+
+        let row = table.insertRow(-1);
+
+        let url = row.insertCell(0);
+        let urlSlug = row.insertCell(1);
+        let clicks = row.insertCell(2);
+        let date = row.insertCell(3);
+
+        url.innerHTML = link.url;
+        urlSlug.innerHTML = link.urlSlug;
+        clicks.innerHTML = link.clicks;
+
+        const dateObj = new Date(link.date);
+
+        date.innerHTML = dateObj.toString();
+
+    }
+
+    function handleData() {
+
+        const clicks = <%= JSON.stringify(clicks) %>;
+
+        let table = document.getElementById("data-table");
+
+        clicks.forEach(click => {
+            let row = table.insertRow(-1);
+
+            let ip = row.insertCell(0);
+            ip.innerHTML = click.ip;
+
+            let date = row.insertCell(1);
+            date.innerHTML = new Date(click.date).toString();
+        });
+    }
+</script>
+</body>
+</html>
