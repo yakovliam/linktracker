@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Link = require('../model/Link');
+const Click = require('../model/Click');
 
 router.get('*', async function (req, res) {
 
@@ -16,8 +17,16 @@ router.get('*', async function (req, res) {
     // is found....get the redirect link!
     const url = targetLink.url;
 
-    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    //TODO HERE
+    // make new click object
+    const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
+
+    const click = new Click({
+        ip: ip,
+        urlSlug: slug
+    });
+
+    click.save();
+
     // increment clicks
     targetLink.clicks++;
     targetLink.save();

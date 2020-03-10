@@ -9,23 +9,31 @@ router.get('/', async function (req, res) {
     // get jwt token
     const token = req.cookies['auth-token'];
     let verified = false;
-    let verifiedUser;
+    let verifiedUser; // temp var which is needed to process
 
     if (token !== undefined) {
         verifiedUser = jwt.verify(token, process.env.TOKEN_SECRET);
-        if (verifiedUser)
+
+        // check existence
+        const exists = await User.findOne({_id: verifiedUser._id});
+
+        if (verifiedUser && exists)
             verified = true;
     }
+
     if (!verified) {
         // display the login page
         res.render('login/login_form', {title: "Log In"});
     } else {
-        // get user data
-        const user = await User.findOne({_id: verifiedUser._id});
-
+        // get data
         const userLinks = await Link.find({userId: verifiedUser._id});
 
-        res.render('profile/index', {title: 'Profile', username: user.username, links: userLinks});
+        res.render('profile/index', {
+            title: 'Profile',
+            username: verifiedUser.username,
+            links: userLinks,
+            baseOrigin: req.get('host')
+        });
     }
 });
 
@@ -45,9 +53,7 @@ router.get('/manage', async function (req, res) {
         // redirect to login
         res.redirect("../../");
     } else {
-
         const slug = req.query.slug;
-        const baseUrl = req.query.baseUrl;
 
         // does the user have perms to access this?
         const linkObj = await Link.findOne({userId: verifiedUser._id, urlSlug: slug});
@@ -59,6 +65,7 @@ router.get('/manage', async function (req, res) {
         // get clicks
         const clicks = await Click.find({urlSlug: slug});
 
+        // render
         res.render('manage/index', {
             title: "Manage",
             username: "username",

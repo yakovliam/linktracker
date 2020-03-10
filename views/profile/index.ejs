@@ -45,6 +45,7 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
 <script src="js/jquery.stickyheader.js"></script>
 <script>
+    const baseOrigin = "http://<%= baseOrigin %>/";
     // response error
     $("#response-error").hide();
 
@@ -94,7 +95,7 @@
     }
 
     // links handling
-    let links =<%- JSON.stringify(links) %>;
+    let links = <%- JSON.stringify(links) %>;
 
     let table = document.getElementById("table");
 
@@ -107,7 +108,7 @@
         let date = row.insertCell(3);
 
         url.innerHTML = link.url;
-        urlSlug.innerHTML = "<a href='" + window.location + "links" + link.urlSlug + "'>" + window.location + "links" + link.urlSlug + "</a>";
+        urlSlug.innerHTML = "<a href='" + baseOrigin +"links/" + link.urlSlug + "'>" + baseOrigin + "links/" + link.urlSlug + "</a>";
         clicks.innerHTML = link.clicks;
 
         const dateObj = new Date(link.date);

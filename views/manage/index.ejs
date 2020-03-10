@@ -88,11 +88,11 @@
 
     function handleData() {
 
-        const clicks = <%= JSON.stringify(clicks) %>;
+        const clicks = <%- JSON.stringify(clicks) %>;
 
         let table = document.getElementById("data-table");
 
-        clicks.forEach(click => {
+        clicks.sort((a, b) => a.date > b.date).reverse().forEach(click => {
             let row = table.insertRow(-1);
 
             let ip = row.insertCell(0);
@@ -102,6 +102,9 @@
             date.innerHTML = new Date(click.date).toString();
         });
     }
+
+    handleLinks();
+    handleData();
 </script>
 </body>
 </html>
