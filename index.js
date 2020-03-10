@@ -41,5 +41,7 @@ app.use('/', indexRoute);
 app.use('/api/links', linksApiRoute);
 app.use('/links', linksRoute);
 
+// use port 3000 unless there exists a preconfigured port
+var port = process.env.port || 8010;
 
-app.listen(3000, () => console.log("Started on port 3000"));
+app.listen(port, () => console.log("Started server!"));
