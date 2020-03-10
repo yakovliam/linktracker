@@ -12,7 +12,7 @@
 <body>
 <div class="container">
     <header>
-        <h1>Logged into <%= username %></h1>
+        <h1>Logged into <b><%= username %></b></h1>
         <br/>
         <button class="button" id="logout">LOG OUT</button>
     </header>
@@ -116,7 +116,8 @@
         date.innerHTML = dateObj.toString();
 
         let manage = row.insertCell(4);
-        manage.innerHTML = "<a onclick='parseRedirect(this)' name='" + link.urlSlug + "' href='#'>MANAGE</a>";
+        // manage.innerHTML = "<a onclick='parseRedirect(this)' name='" + link.urlSlug + "'>MANAGE</a>";
+        manage.innerHTML = "<button class='button' onclick='parseRedirect(this)' name='" + link.urlSlug + "'>MANAGE</button>";
     });
 
     // parse message

@@ -60,4 +60,48 @@ router.post('/create', async function (req, res) {
     }
 });
 
+router.post('/delete', async function (req, res) {
+
+    // get jwt token
+    const token = req.cookies['auth-token'];
+    //const token = req.headers['auth-token'];
+    let verified = false;
+    let verifiedUser;
+
+    if (token !== undefined) {
+        verifiedUser = jwt.verify(token, process.env.TOKEN_SECRET);
+        if (verifiedUser)
+            verified = true;
+    }
+
+    // check validity of user
+    const user = await User.findOne({_id: verifiedUser._id});
+
+    if (!user) {
+        return res.status(400).send("User does not exist.");
+    }
+
+    if (verified) {
+        // get body (which contains the url that will be gone to)
+        const slug = req.body.slug;
+
+        if (!slug) {
+            return res.status(400).send("Invalid \"slug\" parameter.");
+        }
+
+        /* VALID, GET AND DELETE */
+
+        const link = await Link.findOne({urlSlug: slug});
+
+        if (link)
+            link.remove();
+
+        // return slug
+        return res.send("success");
+
+    } else {
+        res.status(403).send("Access Denied.")
+    }
+});
+
 module.exports = router;

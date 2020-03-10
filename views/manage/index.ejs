@@ -12,12 +12,13 @@
 <body>
 <div class="container">
     <header>
-        <h1>Logged into <%= username %></h1>
+        <h1>Logged into <b><%= username %></b></h1>
         <h2>Managing <%= slug %></h2>
         <br/>
         <button class="button" id="back">BACK</button>
     </header>
     <div class="component">
+        <button class="button" id="delete">DELETE</button>
         <h2>Statistics</h2>
         <p>Link statistics</p>
         <table id="table">
@@ -52,12 +53,20 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
 <script src="js/jquery.stickyheader.js"></script>
 <script>
-    // logout button
+    // back button
     document.getElementById("back").addEventListener("click", (ev) => {
         ev.preventDefault();
 
         window.location.href = "../";
     });
+
+    // delete button
+    document.getElementById("delete").addEventListener("click", (ev) => {
+        ev.preventDefault();
+
+        del();
+    });
+
 
     function delete_cookie(name) {
         document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -103,8 +112,33 @@
         });
     }
 
-    handleLinks();
-    handleData();
+    function del() {
+
+        const link = <%- JSON.stringify(link) %>;
+
+        const slug = link.urlSlug;
+
+        // send post to delete api
+        $.ajax({
+            type: "POST",
+            url: "/api/links/delete",
+            data: {slug: slug},
+            success: function () {
+                console.log('> success');
+                window.location.href = "../";
+                location.reload();
+            },
+            error: function (msg) {
+                console.log("> error");
+            }
+        });
+
+    }
+
+    $(document).ready(() => {
+        handleData();
+        handleLinks();
+    });
 </script>
 </body>
 </html>

@@ -25,12 +25,15 @@ router.get('/', async function (req, res) {
         // display the login page
         res.render('login/login_form', {title: "Log In"});
     } else {
+        // get user
+        const user = await User.findOne({_id: verifiedUser._id});
+
         // get data
         const userLinks = await Link.find({userId: verifiedUser._id});
 
         res.render('profile/index', {
             title: 'Profile',
-            username: verifiedUser.username,
+            username: user.username,
             links: userLinks,
             baseOrigin: req.get('host')
         });
@@ -62,13 +65,15 @@ router.get('/manage', async function (req, res) {
             return res.status(403).redirect("../../");
         }
 
+        const user = await User.findOne({_id: verifiedUser._id});
+
         // get clicks
         const clicks = await Click.find({urlSlug: slug});
 
         // render
         res.render('manage/index', {
             title: "Manage",
-            username: "username",
+            username: user.username,
             link: linkObj,
             slug: linkObj.urlSlug, clicks: clicks
         });
